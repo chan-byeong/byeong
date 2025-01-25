@@ -4,10 +4,29 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
+  padding: 6rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+
+.heroTitle {
+  font-family: "Sora", sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: start;
+}
+
+.heroSubtitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: start;
+}
+
+.heroCaption {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: end;
 }
 
 @media screen and (max-width: 996px) {
