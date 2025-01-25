@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbyeong=self.webpackChunkbyeong||[]).push([[6225],{9239:(e,n,s)=>{s.r(n),s.d(n,{default:()=>c});s(6540);var r=s(1410),a=s(4848);function c(){return(0,a.jsx)(r.A,{title:"Resume",children:(0,a.jsx)("main",{className:"container margin-vert--lg",children:(0,a.jsx)("h1",{children:"Resume"})})})}}}]);
