@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbyeong=self.webpackChunkbyeong||[]).push([[1237],{5930:e=>{e.exports=JSON.parse('{"metadata":{"permalink":"/byeong/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":6,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
