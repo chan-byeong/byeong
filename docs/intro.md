@@ -2,46 +2,18 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Archive Intro
 
-Let's discover **Docusaurus in less than 5 minutes**.
+<p style={{fontSize: "1rem", fontWeight:"bold"}}>각종 기술과 프로젝트의 발자취를 기록합니다</p>
 
-## Getting Started
+개발자의 여정은 끊임없는 학습과 도전의 연속입니다.
 
-Get started by **creating a new site**.
+이 아카이브는 제가 공부하고 경험한 다양한 기술들과 프로젝트들의 기록을 담고 있습니다.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+각 항목은 실무에서 직접 부딪힌 문제들과 그 해결 과정, 새로운 기술을 탐구하며 얻은 인사이트를 담고 있습니다.
 
-### What you'll need
+단순한 기술 문서가 아닌, 실제 개발 과정에서 겪은 시행착오와 깨달음을 공유하고자 합니다.
 
-- [Node.js](https://nodejs.org/en/download/) version 18.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+> "기록하지 않으면 기억되지 않는다"
 
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+이 아카이브를 통해 제 개발 여정의 발자취를 남기고, 다른 개발자들과 경험을 나눌 수 있기를 바랍니다.
