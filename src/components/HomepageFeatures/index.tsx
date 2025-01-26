@@ -16,7 +16,7 @@ const FeatureList: FeatureItem[] = [
     title: "Archive",
     Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
     description: <>프로젝트를 소개합니다.</>,
-    to: "/projects",
+    to: "/docs/intro",
   },
   {
     title: "Posts",
