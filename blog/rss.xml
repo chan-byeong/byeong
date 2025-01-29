@@ -4,10 +4,93 @@
         <title>byeong Blog</title>
         <link>https://chan-byeong.github.io/byeong/blog</link>
         <description>byeong Blog</description>
-        <lastBuildDate>Sat, 13 Jan 2024 00:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 30 Jan 2024 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>ko</language>
+        <item>
+            <title><![CDATA[리액트는 어떻게 동작할까#1?]]></title>
+            <link>https://chan-byeong.github.io/byeong/blog/how-react-works-behind</link>
+            <guid>https://chan-byeong.github.io/byeong/blog/how-react-works-behind</guid>
+            <pubDate>Tue, 30 Jan 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[개요]]></description>
+            <content:encoded><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="개요">개요<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#%EA%B0%9C%EC%9A%94" class="hash-link" aria-label="개요에 대한 직접 링크" title="개요에 대한 직접 링크">​</a></h2>
+<p>리액트 내부의 동작 과정을 이해하기 위해서 이 글을 작성하게 되었다.</p>
+<p>리액트는 어떻게 동작하는지, 어떤 원리로 동작하는지에 대해 알아보자.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="component-component-instance-element">Component, Component Instance, Element<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#component-component-instance-element" class="hash-link" aria-label="Component, Component Instance, Element에 대한 직접 링크" title="Component, Component Instance, Element에 대한 직접 링크">​</a></h2>
+<p>Component, Component Instance, Element의 차이는 무엇일까?</p>
+<p>이해하기 쉽게 설명해보자면 우리 흔히 사용하는 <code>class</code>와 <code>instance</code>의 차이와 비슷하다.</p>
+<p><code>class</code>는 설계도, <code>instance</code>는 설계도를 바탕으로 만들어진 실체이다.</p>
+<p><code>Component</code>는 설계도, <code>Component Instance</code>는 설계도를 바탕으로 만들어진 실체이다.</p>
+<p>우리가 리액트에서 코드를 쓰며 만드는 <code>Component</code>는 실제로 쓰이는 곳에서 <code>Component Instance</code>로 만들어진다.</p>
+<p><code>Component Instance</code>는 <code>React Element</code>로 변환되고 이 <code>React Element</code>는 <code>DOM Element</code>로 변환되어 화면에 그려진다.</p>
+<p>즉, <code>Component</code> -&gt; <code>Component Instance</code> -&gt; <code>React Element</code> -&gt; <code>DOM Element</code>로 변환되어 화면에 그려진다.</p>
+<figure><img src="https://chan-byeong.github.io/byeong/assets/images/component-flow-0e9b487d3c21a7c5f165e403c55aea64.png" alt="component-flow" style="width:700px"><figcaption style="font-size:0.9rem">컴포넌트의 흐름을 그림으로 나타내면 다음과 같다.</figcaption></figure>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="리액트에서-렌더링이란">리액트에서 <code>렌더링</code>이란<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#%EB%A6%AC%EC%95%A1%ED%8A%B8%EC%97%90%EC%84%9C-%EB%A0%8C%EB%8D%94%EB%A7%81%EC%9D%B4%EB%9E%80" class="hash-link" aria-label="리액트에서-렌더링이란에 대한 직접 링크" title="리액트에서-렌더링이란에 대한 직접 링크">​</a></h2>
+<p>리액트에서 <code>렌더링</code>이란 무엇일까?</p>
+<p><code>렌더링</code>은 흔히 이해하기를 <code>Component</code>를 <code>Component Instance</code>로 만들고, 이를 <code>React Element</code>로 변환하고, 이를 <code>DOM Element</code>로 변환하여 화면에 그리는 과정을 말한다.</p>
+<p>즉, 렌더링이 일어나면 화면에 변화가 생긴다고 이해한다.</p>
+<p>하지만 엄밀히 말해서 리액트에서 <code>렌더링</code>은 화면에 변화를 일으키는 것이 아니다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="상태를-업데이트하면-생기는-변화-render-phase">상태를 업데이트하면 생기는 변화: Render Phase<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#%EC%83%81%ED%83%9C%EB%A5%BC-%EC%97%85%EB%8D%B0%EC%9D%B4%ED%8A%B8%ED%95%98%EB%A9%B4-%EC%83%9D%EA%B8%B0%EB%8A%94-%EB%B3%80%ED%99%94-render-phase" class="hash-link" aria-label="상태를 업데이트하면 생기는 변화: Render Phase에 대한 직접 링크" title="상태를 업데이트하면 생기는 변화: Render Phase에 대한 직접 링크">​</a></h3>
+<p>리액트에서 렌더링은 <code>Component</code>가 <code>props</code>나 <code>state</code>가 변경되었을 때 일어난다.</p>
+<p><code>props</code>나 <code>state</code>가 변경되면 해당 <code>props</code>나 <code>state</code>를 가지고 있는 <code>Component Instance</code>의 <code>state</code>가 최신값으로 변경된다.</p>
+<p>여기까지의 과정이 바로 <code>Render Phase</code>이다. 즉, <code>Render Phase</code>에서는 화면에 어떠한 변화도 일어나지 않는다.</p>
+<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>언제 렌더링이 발생할까</div><div class="admonitionContent_BuS1"><ol>
+<li>초기 렌더링. 처음 컴포넌트가 하면에 그려질 때</li>
+<li><code>props</code>나 <code>state</code>가 변경될 때</li>
+</ol></div></div>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="실제-화면에-변화가-일어나는-과정-commit-phase">실제 화면에 변화가 일어나는 과정: Commit Phase<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#%EC%8B%A4%EC%A0%9C-%ED%99%94%EB%A9%B4%EC%97%90-%EB%B3%80%ED%99%94%EA%B0%80-%EC%9D%BC%EC%96%B4%EB%82%98%EB%8A%94-%EA%B3%BC%EC%A0%95-commit-phase" class="hash-link" aria-label="실제 화면에 변화가 일어나는 과정: Commit Phase에 대한 직접 링크" title="실제 화면에 변화가 일어나는 과정: Commit Phase에 대한 직접 링크">​</a></h3>
+<p><code>Commit Phase</code>에서 실제 DOM을 조작하는 일을 수행한다.</p>
+<p>실제 DOM을 변경하게 되면 화면에 변화가 일어나게 된다.</p>
+<figure><img src="https://chan-byeong.github.io/byeong/assets/images/phases-9559f5f0a2b40519b8169b341b970f30.png" alt="phases" style="width:700px"><figcaption style="font-size:0.9rem"></figcaption></figure>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="render-phase-commit-phase는-어떻게-동작할까">Render Phase, Commit Phase는 어떻게 동작할까?<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#render-phase-commit-phase%EB%8A%94-%EC%96%B4%EB%96%BB%EA%B2%8C-%EB%8F%99%EC%9E%91%ED%95%A0%EA%B9%8C" class="hash-link" aria-label="Render Phase, Commit Phase는 어떻게 동작할까?에 대한 직접 링크" title="Render Phase, Commit Phase는 어떻게 동작할까?에 대한 직접 링크">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="virtual-dom">Virtual DOM<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#virtual-dom" class="hash-link" aria-label="Virtual DOM에 대한 직접 링크" title="Virtual DOM에 대한 직접 링크">​</a></h3>
+<p>리액트는 렌더링을 최적화하기 위해서 흔히 알고 있는 <code>Virtual DOM</code>을 사용한다.</p>
+<p><code>Virtual DOM</code>은 실제 DOM을 조작하기 전에 가상의 DOM을 만들어서 조작하는 방식이다.</p>
+<p><code>Virtual DOM</code>은 위에서 언급한 React Element 객체들의 트리형태이다.</p>
+<p><code>console.log(&lt;Box /&gt;)</code>를 찍어보면 <code>React Element</code> 객체가 나오는 것을 확인할 수 있다.</p>
+<p><code>React Element</code> 객체는 <code>type</code>, <code>props</code>, <code>children</code> 등의 속성을 가지고 있어서 <code>children</code> - <code>parent</code> 관계로 트리를 형성한다.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="render-phase">Render Phase<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#render-phase" class="hash-link" aria-label="Render Phase에 대한 직접 링크" title="Render Phase에 대한 직접 링크">​</a></h3>
+<p><code>Render Phase</code>에서는 상태 변경이 일어나면 <code>React Element</code> 객체를 새로 만들면서 <code>Virtual DOM</code>을 업데이트 한다.</p>
+<p>이때 상태가 변경된 <code>Virtual DOM</code>의 하위 노드들도 모두 업데이트된다. (어떠한 자식노드가 영향을 받을지 모르기 때문에 하위 노드들 모두가 업데이트 된다.)</p>
+<p>상태가 변경된 <code>Virtual DOM</code>과 이전 <code>Virtual DOM</code>을 비교하며 변경된 부분만을 업데이트 하는 과정을 <strong class="text-highlight_OoFG">Reconciliation</strong>이라고 한다.</p>
+<figure><img src="https://chan-byeong.github.io/byeong/assets/images/render-phase-c3d52c6750eadec269736100357731c5.png" alt="render-phase" style="width:1200px"><figcaption style="font-size:0.9rem"></figcaption></figure>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="reconciliation">Reconciliation<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#reconciliation" class="hash-link" aria-label="Reconciliation에 대한 직접 링크" title="Reconciliation에 대한 직접 링크">​</a></h3>
+<p><code>Reconciliation</code>은 <code>Current Fiber Tree</code>와 업데이트된 <code>Virtual DOM</code>을 비교하며 변경된 부분을 식별하는 과정이다.</p>
+<p><code>Fiber Tree</code>는 초기 렌더링 시 생성되며, 이후 업데이트마다 <code>Work In Progress Tree</code>가 생성되어 작업이 수행된다.</p>
+<p><code>Fiber Tree</code>의 각 노드는 <code>Fiber</code>라고 부르며 <code>Fiber</code>는 여러가지 정보를 가지고 있다.</p>
+<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>Fiber는 다음과 같은 정보를 가지고 있다.</div><div class="admonitionContent_BuS1"><ul>
+<li>Type과 Key</li>
+<li>Pending State</li>
+<li>Props</li>
+<li>DOM node 참조</li>
+<li>Effect List</li>
+<li>Dependencies</li>
+<li>자식/형제/부모 Fiber 참조</li>
+</ul></div></div>
+<p><code>Fiber Tree</code>는 연결리스트 형태의 트리 구조를 가지고 있다.</p>
+<p><code>Fiber Tree</code>를 활용하여 <code>Reconciliation</code> 과정을 수행하게 된다.</p>
+<p><code>Reconciliation</code>의 가장 큰 특징을 바로 <strong class="text-highlight_OoFG">비동기적</strong>으로 작업을 수행할 수 있다는 것이다.</p>
+<p>이러한 비동기성 덕분에 우리는 <code>Suspense</code>나 <code>Transition</code>과 같은 기능을 사용할 수 있게 된다.</p>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>어떻게 비동기적으로 작업을 수행할 수 있을까?</summary><div><div class="collapsibleContent_i85q"><div><p><code>Reconciliation</code> 과정에서 <code>Fiber Tree</code>를 활용하여 <code>Fiber</code> 노드들을 순회하면서 작업을 수행한다.</p><p>이때 <code>Fiber</code> 노드들은 <code>Side Effects</code>를 가지고 있는데 이 <code>Side Effects</code>를 활용하여 작업을 수행한다. (<code>Fiber</code> 노드가 하나의 작업 단위이다.)</p><p><code>Side Effects</code>는 작업을 수행할 때 필요한 정보들을 가지고 있다.</p><p><code>Reconciliation</code> 과정에서 <code>Fiber</code> 노드들을 순회하면서 작업을 수행하다가 우선순위가 높은 작업이 발생하면 작업을 중단하고 우선순위가 높은 작업을 수행하게 된다.</p><p>이렇게 우선순위가 높은 작업을 수행하고 나면 다시 순회하면서 작업을 수행하게 된다. (<code>Fiber</code> 노드가 하나의 작업 단위이기 때문에 이전 작업들에 대한 정보를 가지고 있어서 중단 후 다시 수행할 수 있다.)</p><p>이러한 과정을 통해 비동기적으로 작업을 수행할 수 있게 된다.</p></div></div></div></details>
+<p>정리해보자면 <code>Reconciliation</code>은 업데이트된 <code>Virtual DOM</code>과 <code>Current Fiber Tree</code>를 비교하여 변경사항을 <code>Work In Progress Tree</code>에 반영한다.</p>
+<p>이러한 작업은 Fiber라는 노드 단위로 나뉘어지며 작업 정보는 Fiber 노드에 기록된다. 각 노드 단위로 작업이 분할되어 있기 때문에 작업을 중단하고 우선순위가 높은 다른 작업을 먼저 수행할 수 있는 비동기적인 특징을 가진다.</p>
+<p><code>Reconciliation</code> 과정을 거치면서 변경이 필요한 작업들을 <code>Effect List</code>에 기록하고, 모든 작업이 완료되면 이 리스트를 기반으로 실제 DOM을 업데이트하게 된다.</p>
+<p style="font-size:1.1rem"></p><p>즉, <strong class="text-highlight_OoFG">Render Phase</strong>는 <code>Virtual DOM</code>과 <code>Current Fiber Tree</code>를
+비교하여 변경이 필요한 작업들을 식별하고 <strong class="text-highlight_OoFG">Effect List</strong>를 생성하는
+단계이다.</p><p></p>
+<figure><img src="https://chan-byeong.github.io/byeong/assets/images/result-render-phase-f3fb3c7e6eb4f4c6d350d91e78cd702b.png" alt="result of render phase"><figcaption style="font-size:0.9rem"></figcaption></figure>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="commit-phase">Commit Phase<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#commit-phase" class="hash-link" aria-label="Commit Phase에 대한 직접 링크" title="Commit Phase에 대한 직접 링크">​</a></h3>
+<p>앞서 <code>Commit Phase</code>는 실제 DOM을 조작하는 단계라고 언급했다. 어떻게 <code>Commit Phase</code>에서 DOM을 조작하는지 살펴보자.</p>
+<p>앞선 <code>Render Phase</code>의 결과물로 어떤 것이 나왔는지 생각해보면 유추할 수 있을 것이다.</p>
+<p><code>Render Phase</code>의 결과로 DOM 변경이 필요한 작업들을 모아둔 <code>Effect List</code>가 나왔다.</p>
+<p><code>Commit Phase</code>에서는 이를 활용하여 DOM을 조작한다.</p>
+<p><code>Render Phase</code>에서는 비동기적으로 작업을 수행할 수 있었지만 <code>Commit Phase</code>에서는 동기적으로 모든 작업을 수행한다.</p>
+<p>동기적으로 작업을 함으로써 DOM 업데이트가 일관되게 이루어지고 화면에 불완전한 UI가 표시되는 것을 방지할 수 있다.</p>
+<p>만약 Commit Phase가 비동기적으로 수행된다면, 일부 DOM은 업데이트되고 일부는 업데이트되지 않은 상태로 화면에 표시될 수 있기 때문이다.</p>]]></content:encoded>
+            <category>React</category>
+            <category>How React Works Behind</category>
+        </item>
         <item>
             <title><![CDATA[스켈레톤 UI 잘 작성하기]]></title>
             <link>https://chan-byeong.github.io/byeong/blog/skeleton-ui</link>
@@ -153,7 +236,7 @@
             <content:encoded><![CDATA[<br>
 <p><a href="https://tech.kakaopay.com/post/skeleton-ui-idea/" target="_blank" rel="noopener noreferrer">https://tech.kakaopay.com/post/skeleton-ui-idea/</a></p>
 <p>해당 글을 보고 적용하며 쓰는 글 입니다.</p>
-<aside style="background-color:#232323;padding:2rem"><p>💡 로드하는데 1초 미만이 소요되는 모든 항목의 경우 반복되는 애니메이션을 사용하면 주의가 산만해집니다. 사용자는 화면에서 어떤 일이 발생했는지 따라갈 수 없고, 화면에 깜빡이는 내용에 대해 불안을 느낄 수 있습니다.</p><p><em>출처: <a href="https://www.nngroup.com/articles/progress-indicators/" target="_blank" rel="noopener noreferrer">https://www.nngroup.com/articles/progress-indicators/</a></em></p></aside>
+<aside style="background-color:#2e2e2e;padding:2rem;color:#ffffff;border-radius:6px"><p>💡 로드하는데 1초 미만이 소요되는 모든 항목의 경우 반복되는 애니메이션을 사용하면 주의가 산만해집니다. 사용자는 화면에서 어떤 일이 발생했는지 따라갈 수 없고, 화면에 깜빡이는 내용에 대해 불안을 느낄 수 있습니다.</p><p><em>출처: <a href="https://www.nngroup.com/articles/progress-indicators/" target="_blank" rel="noopener noreferrer">https://www.nngroup.com/articles/progress-indicators/</a></em></p></aside>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="개요">개요<a href="https://chan-byeong.github.io/byeong/blog/delayed-skeleton-ui#%EA%B0%9C%EC%9A%94" class="hash-link" aria-label="개요에 대한 직접 링크" title="개요에 대한 직접 링크">​</a></h2>
 <p>우선 현재 서비스는 실시간성을 바탕에 두고 있기 때문에 무거운 작업이 거의 없이 빠르게 화면이 진행된다.</p>
 <p>일반적인 인터넷 환경에서 서비스를 이용한다면 일반적으로 1초 이상 로딩화면을 보면서 대기할 일은 거의 없다.</p>
@@ -239,81 +322,6 @@
             <category>UI/UX</category>
             <category>Skeleton</category>
             <category>Delayed Skeleton</category>
-        </item>
-        <item>
-            <title><![CDATA[Welcome]]></title>
-            <link>https://chan-byeong.github.io/byeong/blog/welcome</link>
-            <guid>https://chan-byeong.github.io/byeong/blog/welcome</guid>
-            <pubDate>Thu, 26 Aug 2021 00:00:00 GMT</pubDate>
-            <description><![CDATA[Docusaurus blogging features are powered by the blog plugin.]]></description>
-            <content:encoded><![CDATA[<p><a href="https://docusaurus.io/docs/blog" target="_blank" rel="noopener noreferrer">Docusaurus blogging features</a> are powered by the <a href="https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog" target="_blank" rel="noopener noreferrer">blog plugin</a>.</p>
-<p>Here are a few tips you might find useful.</p>
-<p>Simply add Markdown files (or folders) to the <code>blog</code> directory.</p>
-<p>Regular blog authors can be added to <code>authors.yml</code>.</p>
-<p>The blog post date can be extracted from filenames, such as:</p>
-<ul>
-<li><code>2019-05-30-welcome.md</code></li>
-<li><code>2019-05-30-welcome/index.md</code></li>
-</ul>
-<p>A blog post folder can be convenient to co-locate blog post images:</p>
-<p><img decoding="async" loading="lazy" alt="Docusaurus Plushie" src="https://chan-byeong.github.io/byeong/assets/images/docusaurus-plushie-banner-a60f7593abca1e3eef26a9afa244e4fb.jpeg" width="1500" height="500" class="img_ev3q"></p>
-<p>The blog supports tags as well!</p>
-<p><strong>And if you don't want a blog</strong>: just delete this directory, and use <code>blog: false</code> in your Docusaurus config.</p>]]></content:encoded>
-            <category>Facebook</category>
-            <category>Hello</category>
-            <category>Docusaurus</category>
-        </item>
-        <item>
-            <title><![CDATA[MDX Blog Post]]></title>
-            <link>https://chan-byeong.github.io/byeong/blog/mdx-blog-post</link>
-            <guid>https://chan-byeong.github.io/byeong/blog/mdx-blog-post</guid>
-            <pubDate>Sun, 01 Aug 2021 00:00:00 GMT</pubDate>
-            <description><![CDATA[Blog posts support Docusaurus Markdown features, such as MDX.]]></description>
-            <content:encoded><![CDATA[<p>Blog posts support <a href="https://docusaurus.io/docs/markdown-features" target="_blank" rel="noopener noreferrer">Docusaurus Markdown features</a>, such as <a href="https://mdxjs.com/" target="_blank" rel="noopener noreferrer">MDX</a>.</p>
-<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>팁</div><div class="admonitionContent_BuS1"><p>Use the power of React to create interactive blog posts.</p></div></div>
-<!-- -->
-<p>For example, use JSX to create an interactive button:</p>
-<div class="language-js codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-js codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token operator">&lt;</span><span class="token plain">button onClick</span><span class="token operator">=</span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token plain"> </span><span class="token arrow operator">=&gt;</span><span class="token plain"> </span><span class="token function" style="color:rgb(80, 250, 123)">alert</span><span class="token punctuation" style="color:rgb(248, 248, 242)">(</span><span class="token string" style="color:rgb(255, 121, 198)">"button clicked!"</span><span class="token punctuation" style="color:rgb(248, 248, 242)">)</span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><span class="token operator">&gt;</span><span class="token maybe-class-name">Click</span><span class="token plain"> me</span><span class="token operator">!</span><span class="token operator">&lt;</span><span class="token operator">/</span><span class="token plain">button</span><span class="token operator">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="클립보드에 코드 복사" title="복사" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<button>Click me!</button>]]></content:encoded>
-            <category>Docusaurus</category>
-        </item>
-        <item>
-            <title><![CDATA[Long Blog Post]]></title>
-            <link>https://chan-byeong.github.io/byeong/blog/long-blog-post</link>
-            <guid>https://chan-byeong.github.io/byeong/blog/long-blog-post</guid>
-            <pubDate>Wed, 29 May 2019 00:00:00 GMT</pubDate>
-            <description><![CDATA[This is the summary of a very long blog post,]]></description>
-            <content:encoded><![CDATA[<p>This is the summary of a very long blog post,</p>
-<p>Use a <code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code> comment to limit blog post size in the list view.</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>]]></content:encoded>
-            <category>Hello</category>
-            <category>Docusaurus</category>
-        </item>
-        <item>
-            <title><![CDATA[First Blog Post]]></title>
-            <link>https://chan-byeong.github.io/byeong/blog/first-blog-post</link>
-            <guid>https://chan-byeong.github.io/byeong/blog/first-blog-post</guid>
-            <pubDate>Tue, 28 May 2019 00:00:00 GMT</pubDate>
-            <description><![CDATA[Lorem ipsum dolor sit amet...]]></description>
-            <content:encoded><![CDATA[<p>Lorem ipsum dolor sit amet...</p>
-<p>...consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>]]></content:encoded>
-            <category>Hola</category>
-            <category>Docusaurus</category>
         </item>
     </channel>
 </rss>
