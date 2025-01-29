@@ -120,3 +120,31 @@ tags: [javascript, coding-test]
 ### 약수의 개수 구현하기
 
 > 제곱근이 정수면 약수의 개수는 홀수다.
+
+### 최대공약수, 최소공배수
+
+최대공약수 = gcd
+최소공배수 = lcm
+
+```javascript
+lcm = (num1 * num2) / gcd;
+```
+
+유클리드 호제법
+
+> 유클리드 호제법의 기본 원리는 num1를 num2로 나눈 나머지를 r이라고 했을 때, GCD(num1, num2) = GCD(num2, r)과 같다는 것이다.
+
+```javascript
+let gcd = (num1, num2) => (num2 > 0 ? gcd(num2, num1 % num2) : num1);
+
+let gcd = (num1, num2) => {
+  while (num2 > 0) {
+    let r = num1 % num2;
+    num1 = num2;
+    num2 = r;
+  }
+  return num1;
+};
+
+let lcm = (num1, num2) => (num1 * num2) / gcd(num1, num2);
+```
