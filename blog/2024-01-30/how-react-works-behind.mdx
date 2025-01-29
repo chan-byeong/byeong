@@ -1,0 +1,175 @@
+---
+slug: how-react-works-behind
+title: 리액트는 어떻게 동작할까#1?
+authors: [chan-byeong]
+tags: [React, How React Works Behind]
+---
+
+import { FigureImage } from "@site/src/components/common/FigureImage";
+import { Bold } from "@site/src/components/common/Bold";
+import componentFlow from "@site/static/img/component-flow.png";
+import phases from "@site/static/img/phases.png";
+import renderPhase from "@site/static/img/render-phase.png";
+import resultRenderPahse from "@site/static/img/result-render-phase.png";
+
+## 개요
+
+리액트 내부의 동작 과정을 이해하기 위해서 이 글을 작성하게 되었다.
+
+리액트는 어떻게 동작하는지, 어떤 원리로 동작하는지에 대해 알아보자.
+
+## Component, Component Instance, Element
+
+Component, Component Instance, Element의 차이는 무엇일까?
+
+이해하기 쉽게 설명해보자면 우리 흔히 사용하는 `class`와 `instance`의 차이와 비슷하다.
+
+`class`는 설계도, `instance`는 설계도를 바탕으로 만들어진 실체이다.
+
+`Component`는 설계도, `Component Instance`는 설계도를 바탕으로 만들어진 실체이다.
+
+우리가 리액트에서 코드를 쓰며 만드는 `Component`는 실제로 쓰이는 곳에서 `Component Instance`로 만들어진다.
+
+`Component Instance`는 `React Element`로 변환되고 이 `React Element`는 `DOM Element`로 변환되어 화면에 그려진다.
+
+즉, `Component` -> `Component Instance` -> `React Element` -> `DOM Element`로 변환되어 화면에 그려진다.
+
+<FigureImage
+  src={componentFlow}
+  alt='component-flow'
+  width={700}
+  caption={"컴포넌트의 흐름을 그림으로 나타내면 다음과 같다."}
+/>
+
+## 리액트에서 `렌더링`이란
+
+리액트에서 `렌더링`이란 무엇일까?
+
+`렌더링`은 흔히 이해하기를 `Component`를 `Component Instance`로 만들고, 이를 `React Element`로 변환하고, 이를 `DOM Element`로 변환하여 화면에 그리는 과정을 말한다.
+
+즉, 렌더링이 일어나면 화면에 변화가 생긴다고 이해한다.
+
+하지만 엄밀히 말해서 리액트에서 `렌더링`은 화면에 변화를 일으키는 것이 아니다.
+
+### 상태를 업데이트하면 생기는 변화: Render Phase
+
+리액트에서 렌더링은 `Component`가 `props`나 `state`가 변경되었을 때 일어난다.
+
+`props`나 `state`가 변경되면 해당 `props`나 `state`를 가지고 있는 `Component Instance`의 `state`가 최신값으로 변경된다.
+
+여기까지의 과정이 바로 `Render Phase`이다. 즉, `Render Phase`에서는 화면에 어떠한 변화도 일어나지 않는다.
+
+:::tip[언제 렌더링이 발생할까]
+
+1. 초기 렌더링. 처음 컴포넌트가 하면에 그려질 때
+2. `props`나 `state`가 변경될 때
+
+:::
+
+### 실제 화면에 변화가 일어나는 과정: Commit Phase
+
+`Commit Phase`에서 실제 DOM을 조작하는 일을 수행한다.
+
+실제 DOM을 변경하게 되면 화면에 변화가 일어나게 된다.
+
+<FigureImage src={phases} alt='phases' width={700} />
+
+## Render Phase, Commit Phase는 어떻게 동작할까?
+
+### Virtual DOM
+
+리액트는 렌더링을 최적화하기 위해서 흔히 알고 있는 `Virtual DOM`을 사용한다.
+
+`Virtual DOM`은 실제 DOM을 조작하기 전에 가상의 DOM을 만들어서 조작하는 방식이다.
+
+`Virtual DOM`은 위에서 언급한 React Element 객체들의 트리형태이다.
+
+`console.log(<Box />)`를 찍어보면 `React Element` 객체가 나오는 것을 확인할 수 있다.
+
+`React Element` 객체는 `type`, `props`, `children` 등의 속성을 가지고 있어서 `children` - `parent` 관계로 트리를 형성한다.
+
+### Render Phase
+
+`Render Phase`에서는 상태 변경이 일어나면 `React Element` 객체를 새로 만들면서 `Virtual DOM`을 업데이트 한다.
+
+이때 상태가 변경된 `Virtual DOM`의 하위 노드들도 모두 업데이트된다. (어떠한 자식노드가 영향을 받을지 모르기 때문에 하위 노드들 모두가 업데이트 된다.)
+
+상태가 변경된 `Virtual DOM`과 이전 `Virtual DOM`을 비교하며 변경된 부분만을 업데이트 하는 과정을 <Bold>Reconciliation</Bold>이라고 한다.
+
+<FigureImage src={renderPhase} alt='render-phase' width={1200} />
+
+### Reconciliation
+
+`Reconciliation`은 `Current Fiber Tree`와 업데이트된 `Virtual DOM`을 비교하며 변경된 부분을 식별하는 과정이다.
+
+`Fiber Tree`는 초기 렌더링 시 생성되며, 이후 업데이트마다 `Work In Progress Tree`가 생성되어 작업이 수행된다.
+
+`Fiber Tree`의 각 노드는 `Fiber`라고 부르며 `Fiber`는 여러가지 정보를 가지고 있다.
+
+:::tip[Fiber는 다음과 같은 정보를 가지고 있다.]
+
+- Type과 Key
+- Pending State
+- Props
+- DOM node 참조
+- Effect List
+- Dependencies
+- 자식/형제/부모 Fiber 참조
+
+:::
+
+`Fiber Tree`는 연결리스트 형태의 트리 구조를 가지고 있다.
+
+`Fiber Tree`를 활용하여 `Reconciliation` 과정을 수행하게 된다.
+
+`Reconciliation`의 가장 큰 특징을 바로 <Bold>비동기적</Bold>으로 작업을 수행할 수 있다는 것이다.
+
+이러한 비동기성 덕분에 우리는 `Suspense`나 `Transition`과 같은 기능을 사용할 수 있게 된다.
+
+<details>
+  <summary>어떻게 비동기적으로 작업을 수행할 수 있을까?</summary>
+  <div>
+  `Reconciliation` 과정에서 `Fiber Tree`를 활용하여 `Fiber` 노드들을 순회하면서 작업을 수행한다.
+
+이때 `Fiber` 노드들은 `Side Effects`를 가지고 있는데 이 `Side Effects`를 활용하여 작업을 수행한다. (`Fiber` 노드가 하나의 작업 단위이다.)
+
+`Side Effects`는 작업을 수행할 때 필요한 정보들을 가지고 있다.
+
+`Reconciliation` 과정에서 `Fiber` 노드들을 순회하면서 작업을 수행하다가 우선순위가 높은 작업이 발생하면 작업을 중단하고 우선순위가 높은 작업을 수행하게 된다.
+
+이렇게 우선순위가 높은 작업을 수행하고 나면 다시 순회하면서 작업을 수행하게 된다. (`Fiber` 노드가 하나의 작업 단위이기 때문에 이전 작업들에 대한 정보를 가지고 있어서 중단 후 다시 수행할 수 있다.)
+
+이러한 과정을 통해 비동기적으로 작업을 수행할 수 있게 된다.
+
+  </div>
+</details>
+
+정리해보자면 `Reconciliation`은 업데이트된 `Virtual DOM`과 `Current Fiber Tree`를 비교하여 변경사항을 `Work In Progress Tree`에 반영한다.
+
+이러한 작업은 Fiber라는 노드 단위로 나뉘어지며 작업 정보는 Fiber 노드에 기록된다. 각 노드 단위로 작업이 분할되어 있기 때문에 작업을 중단하고 우선순위가 높은 다른 작업을 먼저 수행할 수 있는 비동기적인 특징을 가진다.
+
+`Reconciliation` 과정을 거치면서 변경이 필요한 작업들을 `Effect List`에 기록하고, 모든 작업이 완료되면 이 리스트를 기반으로 실제 DOM을 업데이트하게 된다.
+
+<p style={{ fontSize: "1.1rem" }}>
+  즉, <Bold>Render Phase</Bold>는 `Virtual DOM`과 `Current Fiber Tree`를
+  비교하여 변경이 필요한 작업들을 식별하고 <Bold>Effect List</Bold>를 생성하는
+  단계이다.
+</p>
+
+<FigureImage src={resultRenderPahse} alt='result of render phase' />
+
+### Commit Phase
+
+앞서 `Commit Phase`는 실제 DOM을 조작하는 단계라고 언급했다. 어떻게 `Commit Phase`에서 DOM을 조작하는지 살펴보자.
+
+앞선 `Render Phase`의 결과물로 어떤 것이 나왔는지 생각해보면 유추할 수 있을 것이다.
+
+`Render Phase`의 결과로 DOM 변경이 필요한 작업들을 모아둔 `Effect List`가 나왔다.
+
+`Commit Phase`에서는 이를 활용하여 DOM을 조작한다.
+
+`Render Phase`에서는 비동기적으로 작업을 수행할 수 있었지만 `Commit Phase`에서는 동기적으로 모든 작업을 수행한다.
+
+동기적으로 작업을 함으로써 DOM 업데이트가 일관되게 이루어지고 화면에 불완전한 UI가 표시되는 것을 방지할 수 있다.
+
+만약 Commit Phase가 비동기적으로 수행된다면, 일부 DOM은 업데이트되고 일부는 업데이트되지 않은 상태로 화면에 표시될 수 있기 때문이다.
