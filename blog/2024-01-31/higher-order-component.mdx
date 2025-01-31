@@ -1,0 +1,185 @@
+---
+slug: higher-order-components
+title: HOC 패턴에 대해 알아보자.
+authors: [chan-byeong]
+tags: [React, HOC]
+---
+
+import { HoverText } from "@site/src/components/common/HoverText";
+
+## 개요
+
+HOC 패턴 말은 많이 들어보았지만 이를 제대로 공부한 적이 없었다.
+
+이번 기회에 HOC 패턴을 공부하고 적용까지 해보려고 한다.
+
+{/* truncate */}
+
+## What is HOC pattern
+
+HOC는 Higher Order Component의 줄임말로 한국어로 직역하면 **고차 컴포넌트**이다.
+
+고차 컴포넌트의 의미는 무엇일까?
+
+고차 컴포넌트란 다른 컴포넌트를 받는 컴포넌트를 의미한다. 즉, 리액트에서는 Props로 컴포넌트를 받는 컴포넌트를 **고차 컴포넌트**라고 한다.
+
+다른 컴포넌트를 받는 컴포넌트를 고차 컴포넌트라고 했으니 고차 컴포넌트의 쓰임이 궁금하다.
+
+HOC 패턴은 보통 반복되는 로직이나 스타일을 적용하기 위해서 쓰인다.
+
+같은 로직이나 스타일이 반복된다면 이를 매번 쓰는 것보다 재사용하는 것이 더 좋아보인다.
+
+고차 컴포넌트에 반복되는 로직 또는 스타일 코드를 작성하고 인자로 들어오는 컴포넌트에 이를 일관되게 적용시켜 반복되는 로직이나 스타일 코드를 재사용할 수 있다.
+
+## How to use HOC pattern
+
+### 컴포넌트에 일관되게 적용해야되는 스타일이 있다고 생각해보자.
+
+    스타일 정의한 `withStyle` 컴포넌트의 props로 스타일을 적용할 컴포넌트를 보낸다.
+
+    ```javascript
+    function withStyle(Component) {
+      return (props) => {
+        const style = {
+          padding: "0.2rem",
+          margin: "1rem",
+        };
+        return <Component style={style} {...props} />;
+      };
+    }
+    ```
+
+    ```javascript
+    const Button = () => <button>Click me</button>;
+
+    const StyledButton = withStyle(Button);
+    ```
+
+    위의 함수 호출 순서는 아래와 같다.
+
+    1.  `withStyle(Button)`이 호출됨
+
+        이때 <HoverText>첫 번째 함수<span>`function withStyle(Component)`</span></HoverText>가 실행되어 새로운 컴포넌트 함수를 반환
+
+    2.  `<StyledButton />`을 사용할 때 <HoverText>반환된 컴포넌트 함수<span>
+        `{(props) => { ... return <Component style={style} {...props} />;}`</span> </HoverText>가 실행됨
+
+        이 함수 내부에서 style 객체가 생성되고
+
+        원래의 Button 컴포넌트에 style과 다른 props가 전달됨
+
+## When use HOC pattern
+
+**위에서 언급했던 바와 같이 여러 컴포넌트에 동일한 로직을 적용해야될 때 사용해야 한다.**
+
+하지만 컴포넌트 트리의 깊이가 충분히 깊다면 고차 컴포넌트 대신 훅의 도입을 고려해보는 것이 좋아보인다.
+
+다음과 같이 여러 HOC를 조합하여 사용하게 되면 트리 계층이 깊어져 디버깅이 어렵게 된다.
+
+```javascript
+const SuperEnhancedComponent = compose(
+  withStyle,
+  withState,
+  withRouter,
+  withTheme
+)(BaseComponent);
+```
+
+또 하나의 문제점은 props의 겹침 현상이 발생할 수 있다.
+
+예를 들어 위의 `withStyle` HOC에서 쓰인 `style` props를 `StyledButton`에서 또 쓰일 경우 props가 겹치게 되어 제대로된 스타일 적용이 되지 않는다.
+
+```javascript
+// ❌ style props가 겹치게 된다.
+<StyledButton style={{color: "#2e2e2e"}}>`
+```
+
+## HOC 대신 Hook 사용하기
+
+모든 HOC 패턴은 아니지만 많은 경우 Hook으로 대체될 수 있다.
+
+```javascript
+// 1️⃣ HOC 방식
+const withAuth = (Component) => {
+  return (props) => {
+    if (!isAuthenticated) {
+      return <LoginPage />;
+    }
+    return <Component {...props} />;
+  };
+};
+
+const ProtectedComponent = withAuth(UserDashboard);
+
+// 2️⃣ Hook으로 대체하기
+const useAuth = () => {
+  const isAuthenticated = checkAuth();
+  return { isAuthenticated };
+};
+
+// Hook을 사용하는 컴포넌트
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
+  return children;
+};
+
+// 사용
+<ProtectedRoute>
+  <UserDashboard />
+</ProtectedRoute>;
+```
+
+모든 HOC 패턴을 Hook으로 대체할 수 있지는 않다.
+
+다음과 같은 경우 HOC 패턴을 Hook으로 대체하는 것이 오히려 안 좋을 수 있다.
+
+### Props 조작이 필요한 경우
+
+```javascript
+onst withDefaultProps = (Component, defaultProps) => {
+  return (props) => {
+    const finalProps = {
+      ...defaultProps,
+      ...props
+    };
+    return <Component {...finalProps} />;
+  };
+};
+
+const EnhancedButton = withDefaultProps(Button, { color: 'blue' });
+```
+
+## 장/단점
+
+### 장점
+
+1. 코드 재사용성
+   여러 컴포넌트에 동일한 기능을 적용할 때 효율적이다.
+
+2. 관심사의 분리
+   로직과 UI를 깔끔하게 분리할 수 있다.
+
+3. 조건부 렌더링 제어
+   컴포넌트의 렌더링을 완벽하게 제어할 수 있다.
+
+### 단점
+
+1. Wrapper Hell
+   여러 HOC를 조합하면 컴포넌트 계층이 깊어진다.
+
+2. Props 충돌
+   여러 HOC에서 동일한 prop 이름을 사용할 때 문제가 발생할 수 있다.
+
+3. 디버깅의 어려움
+   HOC가 중첩될수록 문제의 원인을 찾기 어렵다.
+
+## 참고자료
+
+https://patterns-dev-kr.github.io/design-patterns/hoc-pattern/
+
+https://www.youtube.com/watch?v=OLFV1Ds_L8A&list=PL6dw1BPCcLC4n-4o-t1kQZH0NJeZtpmGp&index=7
+
+https://react.dev/reference/rules/react-calls-components-and-hooks#dont-dynamically-mutate-a-hook
