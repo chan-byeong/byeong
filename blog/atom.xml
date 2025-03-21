@@ -2,16 +2,22 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://chan-byeong.github.io/byeong/blog</id>
     <title>byeong Blog</title>
-    <updated>2024-01-31T00:00:00.000Z</updated>
+    <updated>2025-02-28T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://chan-byeong.github.io/byeong/blog"/>
     <subtitle>byeong Blog</subtitle>
     <icon>https://chan-byeong.github.io/byeong/img/favicon.ico</icon>
     <entry>
+        <title type="html"><![CDATA[build-react-without-vite]]></title>
+        <id>https://chan-byeong.github.io/byeong/blog/2025/02/28/build-react-without-vite</id>
+        <link href="https://chan-byeong.github.io/byeong/blog/2025/02/28/build-react-without-vite"/>
+        <updated>2025-02-28T00:00:00.000Z</updated>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[HOC 패턴에 대해 알아보자.]]></title>
         <id>https://chan-byeong.github.io/byeong/blog/higher-order-components</id>
         <link href="https://chan-byeong.github.io/byeong/blog/higher-order-components"/>
-        <updated>2024-01-31T00:00:00.000Z</updated>
+        <updated>2025-01-31T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[개요]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="개요">개요<a href="https://chan-byeong.github.io/byeong/blog/higher-order-components#%EA%B0%9C%EC%9A%94" class="hash-link" aria-label="개요에 대한 직접 링크" title="개요에 대한 직접 링크">​</a></h2>
 <p>HOC 패턴 말은 많이 들어보았지만 이를 제대로 공부한 적이 없었다.</p>
@@ -104,7 +110,7 @@ HOC가 중첩될수록 문제의 원인을 찾기 어렵다.</p>
         <title type="html"><![CDATA[리액트는 어떻게 동작할까#1?]]></title>
         <id>https://chan-byeong.github.io/byeong/blog/how-react-works-behind</id>
         <link href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind"/>
-        <updated>2024-01-30T00:00:00.000Z</updated>
+        <updated>2025-01-30T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[개요]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="개요">개요<a href="https://chan-byeong.github.io/byeong/blog/how-react-works-behind#%EA%B0%9C%EC%9A%94" class="hash-link" aria-label="개요에 대한 직접 링크" title="개요에 대한 직접 링크">​</a></h2>
 <p>리액트 내부의 동작 과정을 이해하기 위해서 이 글을 작성하게 되었다.</p>
@@ -192,7 +198,7 @@ HOC가 중첩될수록 문제의 원인을 찾기 어렵다.</p>
         <title type="html"><![CDATA[스켈레톤 UI 잘 작성하기]]></title>
         <id>https://chan-byeong.github.io/byeong/blog/skeleton-ui</id>
         <link href="https://chan-byeong.github.io/byeong/blog/skeleton-ui"/>
-        <updated>2024-01-13T00:00:00.000Z</updated>
+        <updated>2025-01-13T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[개요]]></summary>
         <content type="html"><![CDATA[<h2 class="anchor anchorWithStickyNavbar_LWe7" id="개요">개요<a href="https://chan-byeong.github.io/byeong/blog/skeleton-ui#%EA%B0%9C%EC%9A%94" class="hash-link" aria-label="개요에 대한 직접 링크" title="개요에 대한 직접 링크">​</a></h2>
 <p>웹 애플리케이션에서 데이터 로딩은 불가피한 요소이다. 이러한 상황에서 스켈레톤 UI는 사용자 경험을 크게 개선할 수 있는 중요한 디자인 패턴이다.</p>
@@ -333,7 +339,7 @@ HOC가 중첩될수록 문제의 원인을 찾기 어렵다.</p>
         <title type="html"><![CDATA[지연된 스켈레톤 UI 적용하기]]></title>
         <id>https://chan-byeong.github.io/byeong/blog/delayed-skeleton-ui</id>
         <link href="https://chan-byeong.github.io/byeong/blog/delayed-skeleton-ui"/>
-        <updated>2024-01-13T00:00:00.000Z</updated>
+        <updated>2025-01-13T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[https://tech.kakaopay.com/post/skeleton-ui-idea/]]></summary>
         <content type="html"><![CDATA[<br>
 <p><a href="https://tech.kakaopay.com/post/skeleton-ui-idea/" target="_blank" rel="noopener noreferrer">https://tech.kakaopay.com/post/skeleton-ui-idea/</a></p>
